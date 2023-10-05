@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signin</title>
+</head>
+<body>
+    <h1>Signin</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="search_purchase" id="search_purchase">
+        <label for="search_purchase">Buscar comprador</label>
+        <button type="submit">Buscar</button>
+    </form>
+    {% if purchasers %}
+    <h2>Resultados de la búsqueda:</h2>
+    <ul>
+        {% for purchaser in purchasers %}
+        <a href="{% url 'catalog_home' purchaser.id %}">{{ purchaser.name }}</a>
+    
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>No se encontraron compradores</p>
+    {% endif %}
+    
+    
+</body>
+</html>

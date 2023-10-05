@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prosses Order</title>
+</head>
+<body>
+    <h1>Prosses Order</h1>
+    <h2>Productos en el carrito:</h2>
+    <ul>
+        {% for item in cart_items %}
+            <li>
+                Producto: {{ item.product.product_name }}
+                Cantidad: {{ item.quantity }}
+                Precio parcial: ${{ item.partial_price }}
+            </li>
+        {% endfor %}
+    </ul>
+    <h3>Total del carrito: ${{ cart.total_price }}</h3>
+    <form method="POST" action="{% url 'finish_purchase' %}">
+        {% csrf_token %}
+        <button type="submit">Ordenar</button>
+    </form>
+    <a href="{% url 'select_store'%}">Seguir comprando</a>
+</body>
+</html>

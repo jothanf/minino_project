@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Store</title>
+</head>
+<body>
+    <h1>Seleccionar tienda</h1>
+    <p>prueba</p>
+    {% for store in stores %}
+    <a href="{% url 'select_category' store.id %}">{{ store.store_name }}</a>
+    {% endfor%}
+</body>
+</html>

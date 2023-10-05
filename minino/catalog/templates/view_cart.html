@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Cart</title>
+</head>
+<body>
+    <h1>Carrito de compras de {{ purchaser_name }}:</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <ul>
+            {% for product in selected_products %}
+                <li>
+                    {{ product.product_name }} - Precio: ${{ product.price_sale }}
+                    <input type="number" name="product_{{ product.id }}" min="0" value="1">
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="submit" value="Actualizar Carrito">
+    </form>
+    <a href="{% url 'select_store' %}">Continuar la compra</a>
+</body>
+</html>

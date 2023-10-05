@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Products</title>
+    <style>
+        /* Estilos para los recuadros de productos */
+        .product-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            width: 200px; /* Ancho deseado para cada producto */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Estilos para el precio */
+        .product-price {
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Selecciona los productos deseados</h1>
+
+    <div>
+        <form method="POST">
+            {% csrf_token %}
+            {% for product in products %}
+            <div class="product-box">
+                <input type="checkbox" name="selected_products" id="product_{{ product.id }}" value="{{ product.id }}">
+                <label for="product_{{ product.id }}">{{ product.product_name }}</label><br>
+                <p class="product-price">Precio: ${{ product.price_sale }}</p>
+            </div>
+            {% endfor %}
+            <button type="submit">Continuar</button>
+        </form>        
+    </div>
+</body>
+</html>

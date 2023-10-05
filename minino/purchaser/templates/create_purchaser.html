@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Purchaser</title>
+</head>
+<body>
+    <h1>Crear comprador</h1>
+    <a href="{% url 'purchaser_home' %}">Regresar a home</a>
+    <p>{{ message }}</p>
+    <form method='POST'>
+        {% csrf_token %}
+        <label for="purchaser_name">Nombre del cliente</label>
+        <input type="text" name="purchaser_name" id="purchaser_name">
+        <label for="purchaser_phone">Telefono del cliente</label>
+        <input type="number" name="purchaser_phone" id="purchaser_phone">
+        <button type="submit">Crear</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Provider</title>
+</head>
+<body>
+    <h1>Create Provider</h1>
+    {{ alert }}
+    <form method="POST"> <!-- Agrega el atributo 'method' y asegúrate de que sea POST -->
+        {% csrf_token %}
+        {{ form.as_p }} <!-- Utiliza el método 'as_p' para renderizar los campos como párrafos -->
+        <button type="submit">Crear Provedor</button>
+    </form>
+    <div>
+        <a href="{% url 'admin_stores' %}">Regresar</a>
+    </div>
+</body>
+</html>

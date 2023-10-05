@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search By State</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer; /* Cambiar el cursor al pasar por encima para indicar que se puede ordenar */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search by state</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="state">Selecciona un estado:</label>
+        <select name="state" id="state">
+            <option value="in_process">In Process</option>
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+        </select>
+        <button type="submit">Buscar</button>
+    </form>
+
+    <!-- Agrega una tabla en cuadrícula para mostrar los carros -->
+    <h2>Carros en el estado seleccionado:</h2>
+    <table>
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">ID de Compra</th>
+                <th onclick="sortTable(1)">Comprador</th>
+                <th onclick="sortTable(2)">Total</th>
+                <th onclick="sortTable(3)">Estado</th>
+                <th onclick="sortTable(4)">Fecha de Compra</th>
+                <!-- Puedes agregar más columnas aquí según tus necesidades -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for cart in carts_in_state %}
+                <tr>
+                    <td>{{ cart.id }}</td>
+                    <td>{{ cart.purchaser.name }}</td>
+                    <td>{{ cart.total_price }}</td>
+                    <td>{{ cart.state }}</td>
+                    <td>{{ cart.purchase_datetime|date:"Y-m-d H:i:s" }}</td>
+                    <!-- Puedes agregar más columnas aquí según tus necesidades -->
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No se encontraron carros en este estado.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        <a href="{% url 'admin_home' %}">Admin Home</a>
+    </div>
+
+    <script>
+        // Función para ordenar la tabla por la columna especificada
+        function sortTable(columnIndex) {
+            const table = document.querySelector('table');
+            const rows = Array.from(table.querySelectorAll('tr'));
+
+            // Remover la fila de encabezado
+            const headerRow = rows.shift();
+
+            // Ordenar las filas según el contenido de la columna seleccionada
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+                return aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+            });
+
+            // Agregar las filas nuevamente a la tabla
+            rows.unshift(headerRow); // Agregar la fila de encabezado nuevamente
+            table.tBodies[0].innerHTML = rows.map(row => row.outerHTML).join('');
+        }
+    </script>
+</body>
+</html>

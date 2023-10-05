@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Purchases</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Todas las Compras</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID de Compra</th>
+                <th>Comprador</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Fecha de Compra</th> <!-- Nueva columna para mostrar la fecha -->
+                <th>Productos</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cart in all_carts %}
+            <tr>
+                <td>{{ cart.id }}</td>
+                <td>{{ cart.purchaser.name }}</td>
+                <td>{{ cart.total_price }}</td>
+                <td>{{ cart.state }}</td>
+                <td>{{ cart.purchase_datetime|date:"Y-m-d H:i:s" }}</td> <!-- Muestra la fecha formateada -->
+                <td>
+                    <ul>
+                        {% for product_in_cart in cart.productincart_set.all %}
+                        <li>{{ product_in_cart.product.product_name }} (Cantidad: {{ product_in_cart.quantity }})</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div>
+        <a href="{% url 'admin_home' %}">Admin Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchases by User</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Purchases by User: {{ purchaser.name }}</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID de Compra</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Fecha de Compra</th>
+                <th>Productos</th>
+                <th>Precio Unitario</th>
+                <th>Cambiar Estado</th> <!-- Nueva columna para el select -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for cart in carts_by_purchaser %}
+            <tr>
+                <td>{{ cart.id }}</td>
+                <td>{{ cart.total_price }}</td>
+                <td>{{ cart.state }}</td>
+                <td>{{ cart.purchase_datetime|date:"Y-m-d H:i:s" }}</td>
+                <td>
+                    <ul>
+                        {% for product_in_cart in cart.productincart_set.all %}
+                        <li>{{ product_in_cart.product.product_name }} (Cantidad: {{ product_in_cart.quantity }})</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for product_in_cart in cart.productincart_set.all %}
+                        <li>${{ product_in_cart.product.price_sale }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <select name="new_state_{{ cart.id }}">
+                            <option value="in_process" {% if cart.state == 'in_process' %}selected{% endif %}>In Process</option>
+                            <option value="pending" {% if cart.state == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="paid" {% if cart.state == 'paid' %}selected{% endif %}>Paid</option>
+                        </select>
+                        <button type="submit" name="update_cart_{{ cart.id }}">Guardar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div>
+        <a href="{% url 'admin_home' %}">Admin Home</a>
+    </div>
+
+    {% if carts_by_purchaser|length == 0 %}
+    <p>No purchases found for this user.</p>
+    {% endif %}
+</body>
+</html>
